@@ -1,4 +1,4 @@
-open Geometry_Point
+open Point
 
 type line = {
   begin: point,
