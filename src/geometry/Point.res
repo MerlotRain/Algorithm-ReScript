@@ -16,3 +16,16 @@ let toString = p => {
 let equal = (p1, p2) => {
   p1.x == p2.x && p1.y == p2.y
 }
+
+let project = (pt, distance, azimuth) => {
+  let radsXY = azimuth *. Js.Math._PI /. 180.
+  let dx = ref(0.)
+  let dy = ref(0.)
+
+  dx := distance *. Js.Math.sin(radsXY)
+  dy := distance *. Js.Math.cos(radsXY)
+  {
+    x: pt.x +. dx.contents,
+    y: pt.y +. dy.contents,
+  }
+}
