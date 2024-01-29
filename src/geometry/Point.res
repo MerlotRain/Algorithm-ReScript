@@ -1,6 +1,6 @@
 type point = {
-  x: float,
-  y: float,
+  mutable x: float,
+  mutable y: float,
 }
 
 let distance = (p1, p2) => {
