@@ -8,10 +8,10 @@ type bezier = {
   mutable p4: point,
 }
 
-let midPoint = (_b: bezier) => {
+let midPoint = (bz: bezier) => {
   {
-    x: (_b.p1.x +. _b.p4.x +. 3. *. (_b.p2.x +. _b.p3.x)) /. 8.,
-    y: (_b.p1.y +. _b.p4.y +. 3. *. (_b.p2.y +. _b.p3.y)) /. 8.,
+    x: (bz.p1.x +. bz.p4.x +. 3. *. (bz.p2.x +. bz.p3.x)) /. 8.,
+    y: (bz.p1.y +. bz.p4.y +. 3. *. (bz.p2.y +. bz.p3.y)) /. 8.,
   }
 }
 
@@ -65,5 +65,40 @@ let pointAt = (bz: bezier, t: float) => {
   {
     x: x.contents,
     y: y.contents,
+  }
+}
+
+let normalVector = (bz: bezier, t: float) => {
+  let m_t = 1. -. t
+  let a = m_t *. m_t
+  let b = t *. m_t
+  let c = t *. t
+  {
+    x: (bz.p2.y -. bz.p1.y) *. a +. (bz.p3.y -. bz.p2.y) *. b +. (bz.p4.y -. bz.p3.y) *. c,
+    y: (bz.p1.x -. bz.p2.x) *. a +. (bz.p2.x -. bz.p3.x) *. b +. (bz.p3.x -. bz.p4.x) *. c,
+  }
+}
+
+let split = (bz: bezier) => {
+  let _mid = (lhs: point, rhs: point) => {{x: (lhs.x +. rhs.x) *. 0.5, y: (lhs.y +. rhs.y) *. 0.5}}
+  let mid_12 = _mid(bz.p1, bz.p2)
+  let mid_23 = _mid(bz.p2, bz.p3)
+  let mid_34 = _mid(bz.p3, bz.p4)
+  let mid_12_23 = _mid(mid_12, mid_23)
+  let mid_23_34 = _mid(mid_23, mid_34)
+  let mid_12_23__23_34 = _mid(mid_12_23, mid_23_34)
+  list{
+    {
+      p1: bz.p1,
+      p2: mid_12,
+      p3: mid_12_23,
+      p4: mid_12_23__23_34,
+    },
+    {
+      p1: mid_12_23__23_34,
+      p2: mid_23_34,
+      p3: mid_34,
+      p4: bz.p4,
+    },
   }
 }
