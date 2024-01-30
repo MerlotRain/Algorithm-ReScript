@@ -19,3 +19,5 @@ let l = {
 Js.log(Point.distance(p1, p2))
 
 Js.log(Line.length(l))
+
+let a = lsl(1, 2)
